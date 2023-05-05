@@ -77,7 +77,7 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     @Override
     //get the elements from database and replace the content of the view with the data
-    public void onBindViewHolder(@NonNull SpaceListAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
+    /*public void onBindViewHolder(@NonNull SpaceListAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
         Space spaces = spacesList.get(i);
         viewHolder.rowName.setText(spaces.getName());
         viewHolder.rowLoc.setText(spaces.getLocation());
@@ -118,6 +118,44 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
 
 
+    }*/
+
+    public void onBindViewHolder(@NonNull SpaceListAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
+        Space spaces = spacesList.get(i);
+        viewHolder.rowName.setText(spaces.getName());
+        viewHolder.rowLoc.setText(spaces.getLocation());
+        viewHolder.rowCateg.setText(spaces.getCategory());
+
+        // Retrieve the photo data from the current Space object
+        byte[] photoData = spaces.getPhoto();
+
+        // If the photo data exists, decode it as a Bitmap and display it in the ImageView
+        if (photoData != null) {
+            Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
+            viewHolder.imageView.setImageBitmap(photoBitmap);
+        } else {
+            // If the photo data is null, set a default image in the ImageView
+            viewHolder.imageView.setImageResource(R.drawable.home);
+        }
+
+        viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Get the clicked space object
+                int position = viewHolder.getAdapterPosition();
+                showDeleteConfirmationDialog(position);
+            }
+        });
+
+        // Set the click listener for the view details button
+        viewHolder.viewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Show the details of the item at the current position
+                showDetails(view, spaces);
+            }
+        });
     }
 
     @Override

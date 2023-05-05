@@ -4,25 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_home"
+    android:background="#E6E3FF"
     tools:context=".home">
 
 
     <TextView
         android:id="@+id/textEventful"
-        android:layout_width="126dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="125dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="71dp"
-        android:layout_marginBottom="6dp"
-        android:text="EVENTFUL"
+        android:layout_width="252dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="42dp"
+        android:text="Welcome to Eventful!"
         android:textColor="#160330"
-        android:textSize="24dp"
+        android:textSize="22dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/searchView"
-        app:layout_constraintEnd_toStartOf="@+id/logoutBtn"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,62 +25,62 @@
         android:id="@+id/logoutBtn"
         android:layout_width="85dp"
         android:layout_height="35dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/custom_button"
         android:text="Logout"
         android:textColor="@color/black"
         android:textSize="10dp"
         app:backgroundTint='@color/white'
-        app:layout_constraintBottom_toTopOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/textEventful"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="364dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="1dp"
+        android:id="@+id/search_bar"
+        android:layout_width="343dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="36dp"
         android:background="@color/white"
-        android:queryHint="Search Spaces"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Space "
         app:layout_constraintBottom_toTopOf="@+id/Addbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textEventful" />
+        app:layout_constraintTop_toBottomOf="@+id/textEventful">
+
+    </SearchView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/Addbtn"
         android:layout_width="58dp"
         android:layout_height="55dp"
-        android:layout_marginStart="351dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="322dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/rwMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:rippleColor="#EAE6E6"
         app:srcCompat="@drawable/baseline_add_24" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwMain"
-        android:layout_width="401dp"
-        android:layout_height="546dp"
+        android:layout_width="412dp"
+        android:layout_height="413dp"
+        android:layout_marginBottom="48dp"
         android:scrollbars='vertical'
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Addbtn" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
