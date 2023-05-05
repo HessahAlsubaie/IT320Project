@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:padding="12dp"
+    android:layout_marginLeft="25dp"
+    android:background="@drawable/rounded_background"
+    android:layout_marginRight="25dp"
+    android:layout_marginTop="6dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="152dp"
+        android:layout_height="169dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="12dp"
+        app:srcCompat="@drawable/home" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/nameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="15dp"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/locTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="15dp"
+            android:text="Location"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/categTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="15dp"
+            android:text="Category"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+        <Button
+            android:id="@+id/viewDetailsBtn"
+            android:layout_width="118dp"
+            android:layout_height="31dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/custom_button"
+            android:text="View Details"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="50dp"
+            android:textSize="10dp"
+            app:backgroundTint="#160330" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="100dp"
+            android:layout_height="34dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/custom_button"
+            android:text="Delete"
+            android:textSize="10dp"
+            app:backgroundTint="#160330" />
+    </LinearLayout>
+
+
+</LinearLayout>
