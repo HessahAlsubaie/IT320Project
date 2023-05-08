@@ -34,15 +34,16 @@ public class Add extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        spaceName=findViewById(R.id.spaceName);
-        location=findViewById(R.id.Location);
-        category=findViewById(R.id.Category);
-        price=findViewById(R.id.price);
-        capacity=findViewById(R.id.capacity);
-        description=findViewById(R.id.description);
+        spaceName = findViewById(R.id.spaceName);
+        location = findViewById(R.id.Location);
+        category = findViewById(R.id.Category);
+        price = findViewById(R.id.price);
+        capacity = findViewById(R.id.capacity);
+        description = findViewById(R.id.description);
 
-        addBtn=findViewById(R.id.submitInfoButton);
-        selectPhotoButton=findViewById(R.id.selectPhotoButton);
+        addBtn = findViewById(R.id.submitInfoButton);
+        selectPhotoButton = findViewById(R.id.selectPhotoButton);
+
 
         // Request permission to read external storage
         requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
@@ -72,10 +73,40 @@ public class Add extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /*  if (photoBitmap == null) {
+               if (photoBitmap == null) {
                     Toast.makeText(Add.this, "Please select a photo", Toast.LENGTH_SHORT).show();
                     return;
-                }*/
+                }
+                boolean nameValid = validateName();
+                boolean locValid = validateLoc();
+                boolean catValid = validateCat();
+                boolean priceValid = validatePrice();
+                boolean descValid = validatedescp();
+
+                if (!nameValid) {
+                    spaceName.requestFocus();
+                    return;
+                }
+
+                if (!locValid) {
+                    location.requestFocus();
+                    return;
+                }
+
+                if (!catValid) {
+                    category.requestFocus();
+                    return;
+                }
+
+                if (!priceValid) {
+                    price.requestFocus();
+                    return;
+                }
+
+                if (!descValid) {
+                    description.requestFocus();
+                    return;
+                }
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 photoBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -83,19 +114,21 @@ public class Add extends AppCompatActivity {
 
                 Space spaceModel;
                 try {
-                    spaceModel = new Space(-1,spaceName.getText().toString(), location.getText().toString(),
+                    spaceModel = new Space(-1, spaceName.getText().toString(), location.getText().toString(),
                             category.getText().toString(), Integer.parseInt(price.getText().toString()), Integer.parseInt(capacity.getText().toString()),
-                            description.getText().toString(),photoData);
+                            description.getText().toString(), photoData);
                 } catch (Exception e) {
                     Toast.makeText(Add.this, "invalid information", Toast.LENGTH_SHORT).show();
-                    spaceModel = new Space(-1,"error", "error", "error", 0, 0, "error",null);
+                    spaceModel = new Space(-1, "error", "error", "error", 0, 0, "error", null);
                 }
                 MyDatabaseHelper myDb = new MyDatabaseHelper(Add.this);
                 boolean success = myDb.addOne(spaceModel);
-                if(success)
-                {Toast.makeText(Add.this, "Added Successfully", Toast.LENGTH_SHORT).show();}
-                else {Toast.makeText(Add.this, "Not Added Successfully", Toast.LENGTH_SHORT).show();}
-                Intent intent= new Intent( Add.this, home.class);
+                if (success) {
+                    Toast.makeText(Add.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Add.this, "Not Added Successfully", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(Add.this, home.class);
                 startActivity(intent);
             }
         });
@@ -114,5 +147,60 @@ public class Add extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean validateName() {
+        String val = spaceName.getText().toString().trim();
+        if (val.isEmpty()) {
+            spaceName.setError("Field cannot be empty");
+            return false;
+        } else {
+            spaceName.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateLoc() {
+        String val = location.getText().toString().trim();
+        if (val.isEmpty()) {
+            location.setError("Field cannot be empty");
+            return false;
+        } else {
+            location.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateCat() {
+        String val = category.getText().toString().trim();
+        if (val.isEmpty()) {
+            category.setError("Field can not be empty. Please choose a category.");
+            return false;
+        } else {
+            category.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatePrice() {
+        String val = price.getText().toString().trim();
+        if (val.isEmpty()) {
+            price.setError("Field cannot be empty");
+            return false;
+        } else {
+            price.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatedescp() {
+        String val = description.getText().toString().trim();
+        if (val.isEmpty()) {
+            description.setError("Please write a short description");
+            return false;
+        } else {
+            description.setError(null);
+            return true;
+        }
     }
 }

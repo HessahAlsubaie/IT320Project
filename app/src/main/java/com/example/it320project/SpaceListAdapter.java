@@ -127,10 +127,15 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         // Create an intent to start the details activity
         Intent intent = new Intent(itemView.getContext(), SpaceDetails.class);
 
-        // Pass the item data to the details activity
+        // Pass the space details as extras to the details activity
+        intent.putExtra("id", item.getId());
         intent.putExtra("name", item.getName());
         intent.putExtra("location", item.getLocation());
         intent.putExtra("category", item.getCategory());
+        intent.putExtra("price", item.getPrice());
+        intent.putExtra("capacity", item.getCapacity());
+        intent.putExtra("description", item.getDescription());
+        intent.putExtra("photo", item.getPhoto());
 
         // Start the details activity
         itemView.getContext().startActivity(intent);
