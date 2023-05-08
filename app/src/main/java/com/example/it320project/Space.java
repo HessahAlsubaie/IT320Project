@@ -1,5 +1,7 @@
 package com.example.it320project;
 
+import android.util.Log;
+
 public class Space {
     private String Name;
     private String location;
@@ -93,6 +95,7 @@ public class Space {
     }
 
     public byte[] getPhoto() {
+        Log.d("Space", "Getting photo data for space: " + Name);
         return photoData;
     }
 

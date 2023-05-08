@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +30,10 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
     MyDatabaseHelper dbHelper;
     RecyclerView rv;
 
-    final View.OnClickListener onClickListener = new MyOnClickistner();
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        //decleare variables for each row
+    final View.OnClickListener onClickListener = new MyOnClickListener();
 
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        //declare variables for each row
         TextView rowName;
         TextView rowLoc;
         TextView rowCateg;
@@ -40,29 +41,24 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         ImageView imageView;
         public View itemView;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView= itemView;
+            this.itemView = itemView;
             //to find each sub view
             rowName = itemView.findViewById(R.id.nameTxt);
             rowLoc = itemView.findViewById(R.id.locTxt);
             rowCateg = itemView.findViewById(R.id.categTxt);
             imageView = itemView.findViewById(R.id.imageView);
-            viewBtn= itemView.findViewById(R.id.viewDetailsBtn);
+            viewBtn = itemView.findViewById(R.id.viewDetailsBtn);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
-
-
         }
     }
 
     public SpaceListAdapter (Context context, List<Space> spacesList, RecyclerView rv){
         mContext = context;
-        this.spacesList=spacesList;
-        this.rv=rv;
+        this.spacesList = spacesList;
+        this.rv = rv;
         this.dbHelper = new MyDatabaseHelper(context);
-
-
     }
 
     @NonNull
@@ -76,58 +72,14 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
     }
 
     @Override
-    //get the elements from database and replace the content of the view with the data
-    /*public void onBindViewHolder(@NonNull SpaceListAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
-        Space spaces = spacesList.get(i);
-        viewHolder.rowName.setText(spaces.getName());
-        viewHolder.rowLoc.setText(spaces.getLocation());
-        viewHolder.rowCateg.setText(spaces.getCategory());
-
-        // Retrieve the photo data from the current Space object
-        byte[] photoData = spaces.getPhoto();
-
-        // If the photo data exists, decode it as a Bitmap and display it in the ImageView
-        if (photoData != null) {
-            Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
-            viewHolder.imageView.setImageBitmap(photoBitmap);
-        }
-
-        viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // Get the clicked space object
-                int position = viewHolder.getAdapterPosition();
-                showDeleteConfirmationDialog(position);
-            }
-        });
-
-
-
-
-
-        // Set the click listener for the view details button
-        viewHolder.viewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Show the details of the item at the current position
-                showDetails(view, spaces);
-
-            }
-        });
-
-
-
-    }*/
-
     public void onBindViewHolder(@NonNull SpaceListAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
-        Space spaces = spacesList.get(i);
-        viewHolder.rowName.setText(spaces.getName());
-        viewHolder.rowLoc.setText(spaces.getLocation());
-        viewHolder.rowCateg.setText(spaces.getCategory());
+        Space space = spacesList.get(i);
+        viewHolder.rowName.setText(space.getName());
+        viewHolder.rowLoc.setText(space.getLocation());
+        viewHolder.rowCateg.setText(space.getCategory());
 
-        // Retrieve the photo data from the current Space object
-        byte[] photoData = spaces.getPhoto();
+        // Retrieve the photo data from the SQLite database for the current Space object
+        byte[] photoData = dbHelper.getPhotoData(space.getId());
 
         // If the photo data exists, decode it as a Bitmap and display it in the ImageView
         if (photoData != null) {
@@ -141,7 +93,6 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // Get the clicked space object
                 int position = viewHolder.getAdapterPosition();
                 showDeleteConfirmationDialog(position);
@@ -153,23 +104,22 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
             @Override
             public void onClick(View view) {
                 // Show the details of the item at the current position
-                showDetails(view, spaces);
+                showDetails(view, space);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return spacesList.size();
+        return spacesList != null ? spacesList.size() : 0;
     }
 
-    private class MyOnClickistner implements View.OnClickListener {
+    private class MyOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            int itemPso= rv.getChildLayoutPosition(v);
-            String item = spacesList.get(itemPso).getName();
+            int itemPos = rv.getChildLayoutPosition(v);
+            String item = spacesList.get(itemPos).getName();
             Toast.makeText(mContext, item, Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -195,7 +145,7 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     private void showDeleteConfirmationDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Are you sure you want to delete this item?");
+        builder.setMessage("Are you sure you want to delete this space?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

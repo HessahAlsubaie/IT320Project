@@ -13,17 +13,17 @@ import java.util.List;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME= "SpacesLibrary.db";
-    private static final int DATABASE_VERSION=2;
-    private static final String TABLE_NAME="SpaceInfo";
-    private static final String COLUMN_ID="_id";
-    private static final String COLUMN_NAME="Space_title";
-    private static final String COLUMN_LOCATION="Space_location";
-    private static final String COLUMN_CATEGORY ="Space_category";
-    private static final String COLUMN_PRICE ="Space_price";
-    private static final String COLUMN_CAPACITY ="Space_capacity";
-    private static final String COLUMN_DATE ="Space_date";
-    private static final String COLUMN_DESCRIPTION ="Space_description";
+    private static final String DATABASE_NAME = "SpacesLibrary.db";
+    private static final int DATABASE_VERSION = 2;
+    private static final String TABLE_NAME = "SpaceInfo";
+    private static final String COLUMN_ID = "_id";
+    private static final String COLUMN_NAME = "Space_title";
+    private static final String COLUMN_LOCATION = "Space_location";
+    private static final String COLUMN_CATEGORY = "Space_category";
+    private static final String COLUMN_PRICE = "Space_price";
+    private static final String COLUMN_CAPACITY = "Space_capacity";
+    private static final String COLUMN_DATE = "Space_date";
+    private static final String COLUMN_DESCRIPTION = "Space_description";
     private static final String COLUMN_PHOTO = "Space_photo";
     private Context context;
 
@@ -35,7 +35,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context =context;
+        this.context = context;
     }
     //create table
     @Override
@@ -67,7 +67,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public boolean addOne(Space spaceModel){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
-
         cv.put(COLUMN_NAME, spaceModel.getName());
         cv.put(COLUMN_LOCATION, spaceModel.getLocation());
         cv.put(COLUMN_CATEGORY, spaceModel.getCategory());
@@ -84,47 +83,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
-    /*public List<Space> getEveryOne(){
-        List<Space> resultList= new ArrayList<>();
-        //get data from database
-        String queryString="SELECT * FROM " + TABLE_NAME;
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        if(cursor.moveToFirst()){
-            do {
-                int spacseId= cursor.getInt(0);
-                String spaceName=cursor.getString(1);
-                String spaceLocation= cursor.getString(2);
-                String spaceCategory= cursor.getString(3);
-                int spacePrice= cursor.getInt(4);
-                int spaceCapacity= cursor.getInt(5);
-                String spaceDesc= cursor.getString(6);
-
-                //creating an objects from the database search and then store them
-                Space spaceModel=new Space(spacseId,spaceName,spaceLocation,spaceCategory,spacePrice,
-                        spaceCapacity,spaceDesc);
-                resultList.add(spaceModel);
-
-            } while(cursor.moveToNext());
-
-
-        } else{
-
-        }
-        cursor.close();
-        db.close();
-        return resultList;
-    }*/
-
     public boolean deleteOne(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         int affectedRows = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[] {String.valueOf(id)});
         db.close();
         return (affectedRows > 0);
     }
-
 
     public List<Space> getAllSpaces(){
         List<Space> resultList= new ArrayList<>();
@@ -135,7 +99,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do {
-                int spacseId= cursor.getInt(0);
+                int spaceId= cursor.getInt(0);
                 String spaceName=cursor.getString(1);
                 String spaceLocation= cursor.getString(2);
                 String spaceCategory= cursor.getString(3);
@@ -145,8 +109,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 byte[] photoData=cursor.getBlob(7);
 
                 //creating an objects from the database search and then store them
-                Space spaceModel=new Space(spacseId,spaceName,spaceLocation,spaceCategory,spacePrice,
-                        spaceCapacity,spaceDesc,photoData);
+                Space spaceModel=new Space(spaceId, spaceName, spaceLocation, spaceCategory, spacePrice,
+                        spaceCapacity, spaceDesc, photoData);
                 spaceList.add(spaceModel);
 
             } while(cursor.moveToNext());
@@ -158,5 +122,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return spaceList;
+    }
+
+    public byte[] getPhotoData(int spaceId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = { COLUMN_PHOTO };
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(spaceId) };
+        Cursor cursor = db.query(
+                TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+        byte[] photoData = null;
+        if (cursor.moveToFirst()) {
+            photoData = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PHOTO));
+        }
+        cursor.close();
+        return photoData;
     }
 }
