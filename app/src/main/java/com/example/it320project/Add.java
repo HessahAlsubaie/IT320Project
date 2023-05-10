@@ -82,9 +82,15 @@ public class Add extends AppCompatActivity {
                 boolean catValid = validateCat();
                 boolean priceValid = validatePrice();
                 boolean descValid = validatedescp();
+                boolean capValid= validateCapacity();
 
                 if (!nameValid) {
                     spaceName.requestFocus();
+                    return;
+                }
+
+                if (!capValid) {
+                    capacity.requestFocus();
                     return;
                 }
 
@@ -185,7 +191,7 @@ public class Add extends AppCompatActivity {
     private boolean validatePrice() {
         String val = price.getText().toString().trim();
         if (val.isEmpty()) {
-            price.setError("Field cannot be empty");
+            price.setError("Field cannot be empty, please set the price");
             return false;
         } else {
             price.setError(null);
@@ -200,6 +206,16 @@ public class Add extends AppCompatActivity {
             return false;
         } else {
             description.setError(null);
+            return true;
+        }
+    }
+    private boolean validateCapacity() {
+        String val = capacity.getText().toString().trim();
+        if (val.isEmpty()) {
+            capacity.setError("Please enter the potential capacity.");
+            return false;
+        } else {
+            capacity.setError(null);
             return true;
         }
     }
