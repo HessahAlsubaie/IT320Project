@@ -69,16 +69,4 @@ public class home extends AppCompatActivity {
 
     }
 
-    private void showDetails(Space space) {
-        // Create an intent to start the details activity
-        Intent intent = new Intent(home.this, SpaceDetails.class);
-
-        // Pass the item data to the details activity
-        intent.putExtra("name", space.getName());
-        intent.putExtra("location", space.getLocation());
-        intent.putExtra("category", space.getCategory());
-
-        // Start the details activity
-        startActivity(intent);
-    }
 }

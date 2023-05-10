@@ -134,7 +134,8 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         intent.putExtra("category", item.getCategory());
         intent.putExtra("price", item.getPrice());
         intent.putExtra("capacity", item.getCapacity());
-        intent.putExtra("description", item.getDescription());
+        String description = dbHelper.getDescription(item.getId());
+        intent.putExtra("description", description);
         intent.putExtra("photo", item.getPhoto());
 
         // Start the details activity

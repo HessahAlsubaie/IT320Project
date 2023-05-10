@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +29,10 @@ public class SpaceDetails extends AppCompatActivity {
         double price = intent.getDoubleExtra("price", 0.0);
         int capacity = intent.getIntExtra("capacity", 0);
         String description = intent.getStringExtra("description");
-        byte[] photo = intent.getByteArrayExtra("photo");
+
+
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
+        byte[] photo = dbHelper.getPhotoData(id);
 
         // Display the space details in the activity layout
         TextView nameTextView = findViewById(R.id.nameTextView);
@@ -52,7 +56,10 @@ public class SpaceDetails extends AppCompatActivity {
         ImageView photoImageView = findViewById(R.id.photoImageView);
         if (photo != null && photo.length > 0) {
             Bitmap photoBitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length);
-            photoImageView.setImageBitmap(photoBitmap);
+            if (photoBitmap != null) {
+                photoImageView.setImageBitmap(photoBitmap);
+
+            }
         }
     }
 }

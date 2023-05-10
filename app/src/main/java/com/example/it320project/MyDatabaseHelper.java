@@ -145,4 +145,26 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return photoData;
     }
+
+    public String getDescription(int spaceId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = { COLUMN_DESCRIPTION };
+        String selection = COLUMN_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(spaceId) };
+        Cursor cursor = db.query(
+                TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+        String description = null;
+        if (cursor.moveToFirst()) {
+            description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+        }
+        cursor.close();
+        return description;
+    }
 }
