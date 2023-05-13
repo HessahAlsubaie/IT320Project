@@ -147,11 +147,13 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         dbHelper.deleteOne(clickedSpace.getId());
         spacesList.remove(position);
         notifyItemRemoved(position);
+        Toast.makeText(mContext, "Deleted successfully", Toast.LENGTH_SHORT).show();
+
     }
 
     private void showDeleteConfirmationDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Are you sure you want to delete this space?");
+        builder.setMessage("Are you sure you want to delete this event space?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -166,5 +168,10 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void setData(List<Space> spaces) {
+        spacesList = spaces;
+        notifyDataSetChanged();
     }
 }

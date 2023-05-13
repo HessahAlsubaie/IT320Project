@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,6 +20,7 @@ import android.Manifest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Add extends AppCompatActivity {
 
@@ -63,7 +65,29 @@ public class Add extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri selectedImage = result.getData().getData();
                         try {
-                            photoBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                            // Check if the selected image is a PNG format
+                            InputStream inputStream = getContentResolver().openInputStream(selectedImage);
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inJustDecodeBounds = true;
+                            BitmapFactory.decodeStream(inputStream, null, options);
+                            inputStream.close();
+                            if (!"image/png".equals(options.outMimeType)) {
+                                Toast.makeText(this, "Please select a PNG image", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            // Check if the selected image is small enough
+                            int maxSize = 2000; // maximum size in pixels
+                            inputStream = getContentResolver().openInputStream(selectedImage);
+                            options.inJustDecodeBounds = false;
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+                            inputStream.close();
+                            if (bitmap.getWidth() > maxSize || bitmap.getHeight() > maxSize) {
+                                Toast.makeText(this, "Please select a smaller image", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            photoBitmap = bitmap;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

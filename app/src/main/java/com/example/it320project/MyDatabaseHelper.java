@@ -3,8 +3,11 @@ package com.example.it320project;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -93,7 +96,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public List<Space> getAllSpaces(){
         List<Space> resultList= new ArrayList<>();
         //get data from database
-        String queryString="SELECT * FROM " + TABLE_NAME;
+       try{ String queryString="SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -120,7 +123,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         }
         cursor.close();
-        db.close();
+        db.close(); }
+       catch(SQLiteBlobTooBigException e){
+           Toast.makeText(context, "Failed to run the query", Toast.LENGTH_SHORT).show();
+
+       }
         return spaceList;
     }
 
@@ -167,4 +174,34 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return description;
     }
-}
+
+    public List<Space> searchSpaces(String name) {
+        List<Space> returnList = new ArrayList<>();
+        // get data from database
+        String queryString = "Select * from " + TABLE_NAME + " WHERE " +
+                COLUMN_NAME + " LIKE '%" + name + "%'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
+            // loop through cursor results
+            do {
+                int spaceId= cursor.getInt(0);
+                String spaceName=cursor.getString(1);
+                String spaceLocation= cursor.getString(2);
+                String spaceCategory= cursor.getString(3);
+                int spacePrice= cursor.getInt(4);
+                int spaceCapacity= cursor.getInt(5);
+                String spaceDesc= cursor.getString(6);
+                byte[] photoData=cursor.getBlob(7);
+
+                //creating an objects from the database search and then store them
+                Space spaceModel=new Space(spaceId, spaceName, spaceLocation, spaceCategory, spacePrice,
+                        spaceCapacity, spaceDesc, photoData);
+                returnList.add(spaceModel);
+            } while (cursor.moveToNext());
+        }
+        //close
+        cursor.close();
+        db.close();
+        return returnList;
+    }}

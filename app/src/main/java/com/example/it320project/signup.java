@@ -14,10 +14,6 @@ public class signup extends AppCompatActivity {
     Button signBtn;
     EditText username, password, email,phoneNumber;
 
-
-
-
-
     usersDatabase DB;
 
     @Override
