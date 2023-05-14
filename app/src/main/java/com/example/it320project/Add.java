@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.Manifest;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +30,7 @@ public class Add extends AppCompatActivity {
     EditText spaceName, location, category, price, capacity, description;
     Button addBtn, selectPhotoButton;
     Bitmap photoBitmap;
+    FloatingActionButton backBtn;
 
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> selectImageLauncher;
@@ -42,6 +45,16 @@ public class Add extends AppCompatActivity {
         price = findViewById(R.id.price);
         capacity = findViewById(R.id.capacity);
         description = findViewById(R.id.description);
+        backBtn= findViewById(R.id.backBtn);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Add.this, home.class);
+                startActivity(intent);
+            }
+        });
+
 
         addBtn = findViewById(R.id.submitInfoButton);
         selectPhotoButton = findViewById(R.id.selectPhotoButton);
@@ -191,9 +204,13 @@ public class Add extends AppCompatActivity {
     }
 
     private boolean validateLoc() {
-        String val = location.getText().toString().trim();
+        String val = location.getText().toString().trim().toLowerCase();
         if (val.isEmpty()) {
             location.setError("Field cannot be empty");
+            return false;
+        } else if (!val.startsWith("north of riyadh") && !val.startsWith("west of riyadh")
+                && !val.startsWith("east of riyadh") && !val.startsWith("south of riyadh")) {
+            location.setError("Location must start with an area form Riyadh");
             return false;
         } else {
             location.setError(null);
