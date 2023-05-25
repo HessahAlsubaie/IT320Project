@@ -62,26 +62,10 @@
     </SearchView>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/Addbtn"
-        android:layout_width="58dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="12dp"
-        android:clickable="true"
-        app:backgroundTint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/rwMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar"
-        app:rippleColor="#EAE6E6"
-        app:srcCompat="@drawable/baseline_add_24" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwMain"
-        android:layout_width="412dp"
-        android:layout_height="413dp"
+        android:layout_width="413dp"
+        android:layout_height="362dp"
         android:layout_marginBottom="16dp"
         android:scrollbars='vertical'
         app:layout_constraintBottom_toBottomOf="parent"
@@ -90,62 +74,60 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_constraintBottom_toTopOf="@+id/rwMain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.034">
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Spinner
-            android:id="@+id/spinnerLoc"
-            android:layout_width="0dp"
-            android:layout_height="31dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_spinner_background" />
-
-        <Spinner
-            android:id="@+id/spinnerCap"
-            android:layout_width="0dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_spinner_background" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="16dp"
-        android:text="Location"
-        android:textColor="#160330"
-        android:textSize="16dp"
+    <Button
+        android:id="@+id/viewRented"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/custom_button"
+        android:text="View My Rentals"
+        app:backgroundTint="#484775"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="168dp"
-        android:text="Capacity"
-        android:textColor="#160330"
-        android:textSize="16dp"
+    <Button
+        android:id="@+id/addRental"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/custom_button"
+        android:text="Add A Rental"
+        app:backgroundTint="#484775"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
+
+    <TextView
+        android:id="@+id/Event_Spaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="251dp"
+        android:text="Event Spaces "
+        android:textColor="#161E37"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/rwMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewRented" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

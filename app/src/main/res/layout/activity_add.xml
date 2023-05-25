@@ -164,7 +164,7 @@
         android:layout_marginBottom="16dp"
         android:background='@drawable/custom_button'
         android:text="Add"
-        app:backgroundTint='#2A0F4E'
+        app:backgroundTint="#484775"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

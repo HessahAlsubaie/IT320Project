@@ -7,14 +7,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class SpaceDetails extends AppCompatActivity {
+
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,5 +69,30 @@ public class SpaceDetails extends AppCompatActivity {
 
             }
         }
-    }
-}
+        btn=findViewById(R.id.rentBtn);
+        int id2 = intent.getIntExtra("id", 0);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MyDatabaseHelper dbHelper = new MyDatabaseHelper(SpaceDetails.this);
+
+                // Get space ID of the selected space
+                int spaceId = id2;
+
+                // Insert into rented spaces table
+                boolean inserted = dbHelper.insertIntoRentedSpaces(spaceId);
+
+                // Update space status in SpaceInfo table
+                boolean updated = dbHelper.updateSpaceStatus(spaceId, 1);
+
+                if (inserted && updated) {
+                    Toast.makeText(SpaceDetails.this, "Successfully rented space!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SpaceDetails.this, RentedSpacesActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SpaceDetails.this, "Renting space failed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+}}

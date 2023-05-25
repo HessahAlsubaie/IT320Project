@@ -12,7 +12,7 @@ public class Space {
     private String description;
     private int id;
 
-    private boolean status;
+    private int status;
     private byte[] photoData;
 
 
@@ -25,8 +25,12 @@ public class Space {
         this.price=price;
         this.capacity=capacity;
         this.description=description;
-        status= false;
+        status= 0;
         this.photoData = photoData;
+
+    }
+
+    public Space(){
 
     }
 
@@ -87,11 +91,12 @@ public class Space {
         this.description = description;
     }
 
-    public boolean isStatus() {
+   //here(status type)
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

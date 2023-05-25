@@ -26,26 +26,29 @@ import java.util.List;
 public class home extends AppCompatActivity {
 
     Button logOutBtn;
-    FloatingActionButton addBtn;
-
+    Button addBtn;
+    Button viewRented;
     MyDatabaseHelper db;
     RecyclerView rv;
     SpaceListAdapter spaceAdapter;
     RecyclerView.LayoutManager layoutManager;
     List<Space> spaceList = new ArrayList<>();
-    Button viewBtn;
-    Button deleteBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+       MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
+
+
         logOutBtn = findViewById(R.id.logoutBtn);
-        addBtn = findViewById(R.id.Addbtn);
+        viewRented= findViewById(R.id.viewRented);
+        addBtn = findViewById(R.id.addRental);
 
         db = new MyDatabaseHelper(this);
-        spaceList = db.getAllSpaces();
+        spaceList = db.getAvailableSpaces();
         rv = findViewById(R.id.rwMain);
         rv.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -54,15 +57,13 @@ public class home extends AppCompatActivity {
         rv.setAdapter(spaceAdapter);
 
 
-        Spinner spinner = findViewById(R.id.spinnerLoc);
-        List<String> filterOptions = Arrays.asList("All", "North of Riyadh", "South of Riyadh", "West of Riyadh", "East of Riyadh");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, filterOptions);
-        spinner.setAdapter(adapter);
-
-        Spinner spinner2 = findViewById(R.id.spinnerCap);
-        List<String> filterOptions2 = Arrays.asList("All", "10-20", "20-30", "30-40", "40 and more");
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, filterOptions2);
-        spinner2.setAdapter(adapter2);
+        viewRented.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(home.this, RentedSpacesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,4 +99,8 @@ public class home extends AppCompatActivity {
         });
 
 
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }}

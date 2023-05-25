@@ -107,6 +107,18 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
                 showDetails(view, space);
             }
         });
+
+        if (space.getStatus() == 1) {
+            viewHolder.itemView.setVisibility(View.GONE);
+            viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+        } else {
+            viewHolder.itemView.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
+            if (params instanceof RecyclerView.LayoutParams) {
+                ((RecyclerView.LayoutParams)params).height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                ((RecyclerView.LayoutParams)params).width = ViewGroup.LayoutParams.MATCH_PARENT;
+            }
+        }
     }
 
     @Override

@@ -162,7 +162,7 @@
         android:background="@drawable/custom_button"
         android:text="Sign up"
         android:textSize="15dp"
-        app:backgroundTint="#160330"
+        app:backgroundTint="#484775"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
