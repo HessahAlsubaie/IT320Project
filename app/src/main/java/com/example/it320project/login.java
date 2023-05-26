@@ -13,7 +13,7 @@ public class login extends AppCompatActivity {
 
     Button submitLog, signupBtn;
     EditText username1, password1;
-    usersDatabase DB;
+    MyDatabaseHelper DB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class login extends AppCompatActivity {
         signupBtn=findViewById(R.id.signUpInlogin);
         username1=findViewById(R.id.username1);
         password1=findViewById(R.id.password1);
-        DB= new usersDatabase(this);
+        DB= new MyDatabaseHelper(this);
         submitLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

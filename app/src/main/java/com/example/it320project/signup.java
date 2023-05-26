@@ -14,7 +14,7 @@ public class signup extends AppCompatActivity {
     Button signBtn;
     EditText username, password, email,phoneNumber;
 
-    usersDatabase DB;
+    MyDatabaseHelper DB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class signup extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         phoneNumber = (EditText) findViewById(R.id.phoneNumber);
         signBtn = findViewById(R.id.signUbBtn);
-        DB = new usersDatabase(this);
+        DB = new MyDatabaseHelper(this);
 
 
         //check info before submitting
