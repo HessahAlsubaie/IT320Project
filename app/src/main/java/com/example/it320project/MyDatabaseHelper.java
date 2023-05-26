@@ -65,7 +65,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         String queryRented = "CREATE TABLE " + TABLE_NAME_RENTED +
                 " (" + COLUMN_ID_RENTED + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_SPACE_ID_RENTED + " INTEGER)";
+                COLUMN_SPACE_ID_RENTED + " INTEGER, " +
+                "FOREIGN KEY(" + COLUMN_SPACE_ID_RENTED + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "))";
 
         db.execSQL(queryRented);
 
