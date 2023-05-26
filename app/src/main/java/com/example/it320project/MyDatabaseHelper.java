@@ -36,6 +36,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SPACE_ID_RENTED = "Space_id";
 
 
+
+    public static final String TABLENAME = "users";
+    public static final String COL_USERNAME = "username";
+    public static final String COL_PASSWORD = "password";
+    public static final String COL_EMAIL = "email";
+    public static final String COL_PHONE = "phone";
+
+
     private Context context;
 
 
@@ -70,6 +78,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(queryRented);
 
+
+        db.execSQL("create Table " + TABLENAME + "(" + COL_USERNAME + " TEXT primary key, " + COL_PASSWORD + " TEXT, " + COL_EMAIL + " TEXT, " + COL_PHONE + " TEXT)");
+
     }
 
 
@@ -79,6 +90,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             // Add the photo column using ALTER TABLE
             String query = "ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_PHOTO + " BLOB";
             db.execSQL(query);
+
+            db.execSQL("drop Table if exists " + TABLENAME);
         }
 
     }
@@ -395,6 +408,33 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         //db.close();
         return returnList;
+    }
+
+
+    public Boolean insertData(String username, String password, String email, String phone){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues= new ContentValues();
+        contentValues.put(COL_USERNAME, username);
+        contentValues.put(COL_PASSWORD, password);
+        contentValues.put(COL_EMAIL, email);
+        contentValues.put(COL_PHONE, phone);
+        long result = MyDB.insert(TABLENAME, null, contentValues);
+        if(result==-1) return false;
+        return true;
+    }
+
+    public Boolean checkUsername(String username) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from " + TABLENAME + " where " + COL_USERNAME + " = ?", new String[]{username});
+        if (cursor.getCount() > 0) return true;
+        return false;
+    }
+
+    public Boolean checkUsernamePassword(String username, String password){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from " + TABLENAME + " where " + COL_USERNAME + " = ? and " + COL_PASSWORD + " = ?", new String[] {username,password});
+        if(cursor.getCount()>0) return true;
+        return false;
     }
 
 
