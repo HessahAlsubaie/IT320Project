@@ -26,7 +26,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CATEGORY = "Space_category";
     private static final String COLUMN_PRICE = "Space_price";
     private static final String COLUMN_CAPACITY = "Space_capacity";
-    private static final String COLUMN_DATE = "Space_date";
     private static final String COLUMN_DESCRIPTION = "Space_description";
     private static final String COLUMN_PHOTO = "Space_photo";
     private static final String COLUMN_STATUS = "Space_status";
@@ -38,6 +37,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
     public static final String TABLENAME = "users";
+    private static final String COLUMN_USER_ID = "user_id";
     public static final String COL_USERNAME = "username";
     public static final String COL_PASSWORD = "password";
     public static final String COL_EMAIL = "email";
@@ -64,23 +64,31 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_CATEGORY + " TEXT, " +
                 COLUMN_PRICE + " INTEGER, " +
                 COLUMN_CAPACITY + " INTEGER, " +
-                COLUMN_DATE + " TEXT, " +
                 COLUMN_DESCRIPTION + " TEXT, "+
                 COLUMN_PHOTO + " BLOB, " +
-                COLUMN_STATUS + " INTEGER DEFAULT 0)";
+                COLUMN_STATUS + " INTEGER DEFAULT 0, " +
+                COLUMN_USER_ID + " INTEGER, " +
+                "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLENAME + "(" + COLUMN_USER_ID + ")" + " ) ";
         db.execSQL(query);
 
 
         String queryRented = "CREATE TABLE " + TABLE_NAME_RENTED +
                 " (" + COLUMN_ID_RENTED + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_SPACE_ID_RENTED + " INTEGER, " +
-                "FOREIGN KEY(" + COLUMN_SPACE_ID_RENTED + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "))";
+                "user_id INTEGER, " +
+                "FOREIGN KEY(" + COLUMN_SPACE_ID_RENTED + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "), " +
+                "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLENAME + "(" + COLUMN_USER_ID + ")" + " ) ";
 
         db.execSQL(queryRented);
 
 
-        db.execSQL("create Table " + TABLENAME + "(" + COL_USERNAME + " TEXT primary key, " + COL_PASSWORD + " TEXT, " + COL_EMAIL + " TEXT, " + COL_PHONE + " TEXT)");
-
+        db.execSQL("CREATE TABLE " + TABLENAME + "(" +
+                COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_USERNAME + " TEXT, " +
+                COL_PASSWORD + " TEXT, " +
+                COL_EMAIL + " TEXT, " +
+                COL_PHONE + " TEXT" +
+                ")");
     }
 
 
@@ -94,6 +102,38 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("drop Table if exists " + TABLENAME);
         }
 
+    }
+
+    public Space getSpaceById(int id) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME,
+                new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_LOCATION, COLUMN_CATEGORY,
+                        COLUMN_PRICE, COLUMN_CAPACITY, COLUMN_DESCRIPTION, COLUMN_PHOTO},
+                COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        if (cursor != null) {
+
+            cursor.moveToFirst();
+
+            String name = cursor.getString(1);
+            String location = cursor.getString(2);
+            String category = cursor.getString(3);
+            int price = cursor.getInt(4);
+            int capacity = cursor.getInt(5);
+            String description = cursor.getString(6);
+            byte[] photo = cursor.getBlob(7);
+
+            Space space = new Space(
+                    id, name, location, category, price, capacity, description, photo);
+
+            cursor.close();
+            return space;
+        } else {
+            return null;
+        }
     }
     //add space to the database
     public boolean addOne(Space spaceModel){

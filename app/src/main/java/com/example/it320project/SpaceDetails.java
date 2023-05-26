@@ -29,18 +29,28 @@ public class SpaceDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_details);
 
-        Intent intent = getIntent();
+       Intent intent = getIntent();
+       /*
         int id = intent.getIntExtra("id", 0);
         String name = intent.getStringExtra("name");
         String location = intent.getStringExtra("location");
         String category = intent.getStringExtra("category");
         double price = intent.getDoubleExtra("price", 0.0);
         int capacity = intent.getIntExtra("capacity", 0);
-        String description = intent.getStringExtra("description");
+        String description = intent.getStringExtra("description");*/
+        MyDatabaseHelper dbHelper=new  MyDatabaseHelper(this);
 
 
-        MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
-        byte[] photo = dbHelper.getPhotoData(id);
+        int spaceId = getIntent().getIntExtra("id", 0);
+        Space space = dbHelper.getSpaceById(spaceId);
+        String name= space.getName();
+        String location = space.getLocation();
+        String category =space.getCategory();
+        double price = space.getPrice();
+        int capacity = space.getCapacity();
+        String description = space.getDescription();
+
+        byte[] photo = dbHelper.getPhotoData(spaceId);
 
         // Display the space details in the activity layout
         TextView nameTextView = findViewById(R.id.nameTextView);

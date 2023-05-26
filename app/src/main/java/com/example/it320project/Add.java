@@ -207,12 +207,8 @@ public class Add extends AppCompatActivity {
         String val = location.getText().toString().trim().toLowerCase();
         if (val.isEmpty()) {
             location.setError("Field cannot be empty");
-            return false;
-        } else if (!val.startsWith("north of riyadh") && !val.startsWith("west of riyadh")
-                && !val.startsWith("east of riyadh") && !val.startsWith("south of riyadh")) {
-            location.setError("Location must start with an area form Riyadh");
-            return false;
-        } else {
+            return false; }
+       else {
             location.setError(null);
             return true;
         }

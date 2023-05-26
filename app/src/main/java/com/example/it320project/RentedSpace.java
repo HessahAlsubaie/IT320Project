@@ -22,27 +22,5 @@ public class RentedSpace {
         this.id = id;
     }
 
-    public int getSpaceId() {
-        return spaceId;
-    }
 
-    public void setSpaceId(int spaceId) {
-        this.spaceId = spaceId;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
 }

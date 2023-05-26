@@ -140,7 +140,7 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         Intent intent = new Intent(itemView.getContext(), SpaceDetails.class);
 
         // Pass the space details as extras to the details activity
-        intent.putExtra("id", item.getId());
+       /* intent.putExtra("id", item.getId());
         intent.putExtra("name", item.getName());
         intent.putExtra("location", item.getLocation());
         intent.putExtra("category", item.getCategory());
@@ -148,7 +148,8 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         intent.putExtra("capacity", item.getCapacity());
         String description = dbHelper.getDescription(item.getId());
         intent.putExtra("description", description);
-        intent.putExtra("photo", item.getPhoto());
+        intent.putExtra("photo", item.getPhoto());*/
+        intent.putExtra("id", item.getId());
 
         // Start the details activity
         itemView.getContext().startActivity(intent);
