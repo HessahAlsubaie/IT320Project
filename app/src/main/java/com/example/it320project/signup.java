@@ -3,6 +3,7 @@ package com.example.it320project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,7 @@ public class signup extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String eml = email.getText().toString();
                 String phone = phoneNumber.getText().toString();
+                SharedPreferences preferences = getSharedPreferences("my_prefs", MODE_PRIVATE);
 
 
                 if (user.equals("") || pass.equals("") || eml.equals("") || phone.equals("")){
@@ -55,6 +57,8 @@ public class signup extends AppCompatActivity {
                         Boolean insert = DB.insertData(user, pass, eml, phone);
                         if (insert == true) {
                             Toast.makeText(signup.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                            preferences.edit().putString("username", user).apply();
+                            DB.setCurrentUserId(user);
                             Intent intent = new Intent(getApplicationContext(), home.class);
                             startActivity(intent);
                         } else {

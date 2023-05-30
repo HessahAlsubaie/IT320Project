@@ -4,6 +4,7 @@ import android.util.Log;
 
 public class Space {
     private String Name;
+    int userId = -1;
     private String location;
     private String category;
     private double price;
@@ -16,8 +17,9 @@ public class Space {
     private byte[] photoData;
 
 
+
     public Space(int id, String Name, String location,
-                 String category, double price, int capacity, String description, byte[] photoData) {
+                 String category, double price, int capacity, String description, byte[] photoData,int userId ) {
         this.id=id;
         this.Name = Name;
         this.location=location;
@@ -27,13 +29,18 @@ public class Space {
         this.description=description;
         status= 0;
         this.photoData = photoData;
+        this.userId=userId;
 
     }
 
-    public Space(){
 
+    public int getUserId() {
+        return userId;
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return Name;
@@ -117,7 +124,8 @@ public class Space {
                         ", category='" + category + '\'' +
                         ", price=" + price +
                         ", capacity=" + capacity +
-                        ", description='" + description + '\''
+                        ", description='" + description + '\''+
+                        " user id" + userId
                 ;
     }
 }

@@ -30,15 +30,7 @@ public class SpaceDetails extends AppCompatActivity {
         setContentView(R.layout.activity_space_details);
 
        Intent intent = getIntent();
-       /*
-        int id = intent.getIntExtra("id", 0);
-        String name = intent.getStringExtra("name");
-        String location = intent.getStringExtra("location");
-        String category = intent.getStringExtra("category");
-        double price = intent.getDoubleExtra("price", 0.0);
-        int capacity = intent.getIntExtra("capacity", 0);
-        String description = intent.getStringExtra("description");*/
-        MyDatabaseHelper dbHelper=new  MyDatabaseHelper(this);
+       MyDatabaseHelper dbHelper=new  MyDatabaseHelper(this);
 
 
         int spaceId = getIntent().getIntExtra("id", 0);
@@ -81,12 +73,15 @@ public class SpaceDetails extends AppCompatActivity {
         }
         btn=findViewById(R.id.rentBtn);
         int id2 = intent.getIntExtra("id", 0);
+        String spaceName = intent.getStringExtra("name");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 MyDatabaseHelper dbHelper = new MyDatabaseHelper(SpaceDetails.this);
-
+                int userId=dbHelper.getSpacesUserId(spaceName);
+                int currentUserId=dbHelper.getCurrentUserId();
+              if (userId != currentUserId) {
                 // Get space ID of the selected space
                 int spaceId = id2;
 
@@ -104,5 +99,8 @@ public class SpaceDetails extends AppCompatActivity {
                     Toast.makeText(SpaceDetails.this, "Renting space failed.", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-}}
+              else {
+                  Toast.makeText(SpaceDetails.this, "Owners Can not rent their Spaces", Toast.LENGTH_SHORT).show();
+              }
+        }
+});}}

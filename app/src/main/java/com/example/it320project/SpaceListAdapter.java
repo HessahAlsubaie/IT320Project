@@ -1,10 +1,14 @@
 package com.example.it320project;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -95,7 +99,8 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
             public void onClick(View view) {
                 // Get the clicked space object
                 int position = viewHolder.getAdapterPosition();
-                showDeleteConfirmationDialog(position);
+                Space clickedSpace = spacesList.get(position);
+                showDeleteConfirmationDialog(position,clickedSpace);
             }
         });
 
@@ -136,22 +141,11 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
     }
 
     private void showDetails(View itemView, Space item) {
-        // Create an intent to start the details activity
+
         Intent intent = new Intent(itemView.getContext(), SpaceDetails.class);
-
-        // Pass the space details as extras to the details activity
-       /* intent.putExtra("id", item.getId());
-        intent.putExtra("name", item.getName());
-        intent.putExtra("location", item.getLocation());
-        intent.putExtra("category", item.getCategory());
-        intent.putExtra("price", item.getPrice());
-        intent.putExtra("capacity", item.getCapacity());
-        String description = dbHelper.getDescription(item.getId());
-        intent.putExtra("description", description);
-        intent.putExtra("photo", item.getPhoto());*/
         intent.putExtra("id", item.getId());
+        intent.putExtra("name", item.getName());
 
-        // Start the details activity
         itemView.getContext().startActivity(intent);
     }
 
@@ -164,27 +158,39 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     }
 
-    private void showDeleteConfirmationDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Are you sure you want to delete this event space?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteItem(position);
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+    private void showDeleteConfirmationDialog(final int position, Space clickedSpace) {
 
+
+        int userId=dbHelper.getSpacesUserId(clickedSpace.getName());
+        int currentUserId=dbHelper.getCurrentUserId();
+        // Check if the space was added by the current user
+        if (userId==currentUserId) {
+            // If the space was added by the current user, show a confirmation dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage("Are you sure you want to delete this event space?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteItem(position);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // If the space was not added by the current user, show a message
+            Toast.makeText(mContext, "Only the owner can delete this event space", Toast.LENGTH_SHORT).show();
+        }
+    }
     public void setData(List<Space> spaces) {
         spacesList = spaces;
         notifyDataSetChanged();
     }
+
+
 }

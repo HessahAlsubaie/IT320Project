@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
     private Context context;
+    static String currentUsername;
 
 
     List<Space> spaceList = new ArrayList<>();
@@ -110,7 +112,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(TABLE_NAME,
                 new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_LOCATION, COLUMN_CATEGORY,
-                        COLUMN_PRICE, COLUMN_CAPACITY, COLUMN_DESCRIPTION, COLUMN_PHOTO},
+                        COLUMN_PRICE, COLUMN_CAPACITY, COLUMN_DESCRIPTION, COLUMN_PHOTO, COLUMN_USER_ID},
                 COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null);
 
@@ -125,9 +127,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int capacity = cursor.getInt(5);
             String description = cursor.getString(6);
             byte[] photo = cursor.getBlob(7);
+            int userId = cursor.getInt(8);
 
             Space space = new Space(
-                    id, name, location, category, price, capacity, description, photo);
+                    id, name, location, category, price, capacity, description, photo, userId);
 
             cursor.close();
             return space;
@@ -136,9 +139,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
     //add space to the database
-    public boolean addOne(Space spaceModel){
+    public boolean addOne(Space spaceModel, long userId){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
+       int userId2 =getCurrentUserId();
+
         cv.put(COLUMN_NAME, spaceModel.getName());
         cv.put(COLUMN_LOCATION, spaceModel.getLocation());
         cv.put(COLUMN_CATEGORY, spaceModel.getCategory());
@@ -147,11 +152,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_DESCRIPTION, spaceModel.getDescription());
         cv.put(COLUMN_PHOTO, spaceModel.getPhoto());
         cv.put(COLUMN_STATUS, spaceModel.getStatus());
+        cv.put(COLUMN_USER_ID, userId2);
 
         long insert= db.insert(TABLE_NAME, null, cv);
         if(insert == -1){
             return false;
         }else{
+
             return true;
         }
     }
@@ -169,9 +176,41 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteOne(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         int affectedRows = db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[] {String.valueOf(id)});
        // db.close();
         return (affectedRows > 0);
+    }
+
+
+    public void setCurrentUserId(String currentUsername){
+        this.currentUsername=currentUsername;
+    }
+
+
+    public int getCurrentUserId() {
+
+        String currentUsername2 = this.currentUsername;
+
+        if(currentUsername2 == null){
+            return -1;
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT user_id FROM users WHERE username = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{ currentUsername2 });
+        if (cursor.moveToFirst()) {
+            int userId = cursor.getInt(0);
+            cursor.close();
+            return userId;
+        }
+
+        cursor.close();
+
+        // Username not found, return -1
+        return -1;
     }
 
     public void returnSpace(int spaceId) {
@@ -235,6 +274,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
+            int userIdIndex = c.getColumnIndex(COLUMN_USER_ID);
+            if (userIdIndex == -1) {
+                return null;
+            }
+
 
             int nameIndex = c.getColumnIndex(COLUMN_NAME);
             if (nameIndex == -1) {
@@ -272,11 +316,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 return null;
             }
 
-
-            int photoIndex1 = c.getColumnIndex(COLUMN_PHOTO);
-            if (photoIndex1 == -1) {
-                return null;
-            }
             int photoIndex = c.getColumnIndex(COLUMN_PHOTO);
             if (photoIndex == -1) {
                 return null;
@@ -291,7 +330,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                     c.getDouble(priceIndex),
                     c.getInt(capacityIndex),
                     c.getString(descriptionIndex),
-                    c.getBlob(photoIndex)
+                    c.getBlob(photoIndex),
+                    c.getInt(userIdIndex)
             );
 
 
@@ -303,45 +343,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         //db.close();
 
         return rentedSpaces;
-    }
-
-    public List<Space> getAllSpaces(){
-        List<Space> resultList= new ArrayList<>();
-        //get data from database
-       try{ String queryString="SELECT * FROM " + TABLE_NAME;
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        if(cursor.moveToFirst()){
-            do {
-                int spaceId= cursor.getInt(0);
-                String spaceName=cursor.getString(1);
-                String spaceLocation= cursor.getString(2);
-                String spaceCategory= cursor.getString(3);
-                int spacePrice= cursor.getInt(4);
-                int spaceCapacity= cursor.getInt(5);
-                String spaceDesc= cursor.getString(6);
-                byte[] photoData=cursor.getBlob(7);
-
-                //creating an objects from the database search and then store them
-                Space spaceModel=new Space(spaceId, spaceName, spaceLocation, spaceCategory, spacePrice,
-                        spaceCapacity, spaceDesc, photoData);
-                spaceList.add(spaceModel);
-
-            } while(cursor.moveToNext());
-
-
-        } else{
-
-        }
-        cursor.close();
-       // db.close();
-           }
-       catch(SQLiteBlobTooBigException e){
-           Toast.makeText(context, "Failed to run the query", Toast.LENGTH_SHORT).show();
-
-       }
-        return spaceList;
     }
 
     public List<Space> getAvailableSpaces() {
@@ -361,10 +362,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 int spaceCapacity= cursor.getInt(5);
                 String spaceDesc= cursor.getString(6);
                 byte[] photoData=cursor.getBlob(7);
+                int userId= cursor.getInt(8);
 
                 //creating an objects from the database search and then store them
                 Space spaceModel=new Space(spaceId, spaceName, spaceLocation, spaceCategory, spacePrice,
-                        spaceCapacity, spaceDesc, photoData);
+                        spaceCapacity, spaceDesc, photoData,userId);
                 spaceList.add(spaceModel);
             } while (cursor.moveToNext());
         }
@@ -437,10 +439,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 int spaceCapacity= cursor.getInt(5);
                 String spaceDesc= cursor.getString(6);
                 byte[] photoData=cursor.getBlob(7);
+                int userId= cursor.getInt(8);
 
                 //creating an objects from the database search and then store them
                 Space spaceModel=new Space(spaceId, spaceName, spaceLocation, spaceCategory, spacePrice,
-                        spaceCapacity, spaceDesc, photoData);
+                        spaceCapacity, spaceDesc, photoData,userId);
                 returnList.add(spaceModel);
             } while (cursor.moveToNext());
         }
@@ -476,7 +479,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         if(cursor.getCount()>0) return true;
         return false;
     }
+    public int getSpacesUserId(String spaceName) {
+        int userId=0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT user_id FROM SpaceInfo WHERE Space_title = ?";
 
+        Cursor cursor = db.rawQuery(query, new String[] {String.valueOf(spaceName)});
 
-}
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(0);
+        }
+
+        cursor.close();
+
+        return userId;
+
+    }}
 

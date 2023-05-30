@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,7 @@ public class Add extends AppCompatActivity {
     Button addBtn, selectPhotoButton;
     Bitmap photoBitmap;
     FloatingActionButton backBtn;
+    MyDatabaseHelper db;
 
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> selectImageLauncher;
@@ -46,6 +49,7 @@ public class Add extends AppCompatActivity {
         capacity = findViewById(R.id.capacity);
         description = findViewById(R.id.description);
         backBtn= findViewById(R.id.backBtn);
+
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,18 +159,23 @@ public class Add extends AppCompatActivity {
                 photoBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] photoData = stream.toByteArray();
 
+                MyDatabaseHelper myDb = new MyDatabaseHelper(getApplicationContext());
+
                 Space spaceModel;
+                int userId = myDb.getCurrentUserId();
                 try {
+
                     spaceModel = new Space(-1, spaceName.getText().toString(), location.getText().toString(),
                             category.getText().toString(), Integer.parseInt(price.getText().toString()), Integer.parseInt(capacity.getText().toString()),
-                            description.getText().toString(), photoData);
+                            description.getText().toString(), photoData, userId);
                 } catch (Exception e) {
                     Toast.makeText(Add.this, "invalid information", Toast.LENGTH_SHORT).show();
-                    spaceModel = new Space(-1, "error", "error", "error", 0, 0, "error", null);
+                    spaceModel = new Space(-1, "error", "error", "error", 0, 0, "error", null,userId);
                 }
-                MyDatabaseHelper myDb = new MyDatabaseHelper(Add.this);
-                boolean success = myDb.addOne(spaceModel);
+
+                boolean success = myDb.addOne(spaceModel,userId);
                 if (success) {
+                  //  Log.d("USER_ID", "User ID added: " + userId+ ", "+ spaceModel.getUserId());
                     Toast.makeText(Add.this, "Added Successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(Add.this, "Not Added Successfully", Toast.LENGTH_SHORT).show();

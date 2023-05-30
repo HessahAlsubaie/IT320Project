@@ -56,7 +56,6 @@ public class home extends AppCompatActivity {
         spaceAdapter = new SpaceListAdapter(this, spaceList, rv);
         rv.setAdapter(spaceAdapter);
 
-
         viewRented.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
