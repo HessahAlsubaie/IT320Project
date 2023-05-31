@@ -53,7 +53,6 @@
         android:iconifiedByDefault="false"
         android:queryHint="Search Space"
         app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/Addbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textEventful">
@@ -64,13 +63,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwMain"
-        android:layout_width="410dp"
-        android:layout_height="404dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="386dp"
+        android:layout_height="429dp"
+        android:layout_marginBottom="4dp"
         android:scrollbars='vertical'
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.36"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
@@ -88,45 +87,76 @@
 
     <Button
         android:id="@+id/viewRented"
-        android:layout_width="160dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="134dp"
+        android:layout_height="45dp"
         android:background="@drawable/custom_button"
         android:text="View My Rentals"
-        app:backgroundTint="#484775"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar" />
+        android:textSize="11sp"
+        app:backgroundTint="#64548E"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toStartOf="@+id/addRental"
+        app:layout_constraintHorizontal_bias="0.671"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.733" />
 
     <Button
         android:id="@+id/addRental"
-        android:layout_width="160dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="134dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="36dp"
         android:background="@drawable/custom_button"
-        android:text="Add A Rental"
-        app:backgroundTint="#484775"
+        android:text="Add Rental"
+        android:textSize="11sp"
+        app:backgroundTint="#64548E"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.755" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="364dp"
+        android:layout_height="136dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="45dp"
+        android:background="@drawable/rounded_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
     <TextView
-        android:id="@+id/Event_Spaces"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="224dp"
-        android:layout_marginBottom="4dp"
-        android:text="Event Spaces "
+        android:text="Find the perfect"
         android:textColor="#161E37"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/rwMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewRented"
-        app:layout_constraintVertical_bias="1.0" />
+        android:textSize="20sp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="0.173" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" event space"
+        android:textColor="#161E37"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.691"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="0.174" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

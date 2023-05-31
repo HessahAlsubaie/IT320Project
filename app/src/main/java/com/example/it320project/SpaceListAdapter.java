@@ -165,7 +165,6 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         int currentUserId=dbHelper.getCurrentUserId();
         // Check if the space was added by the current user
         if (userId==currentUserId) {
-            // If the space was added by the current user, show a confirmation dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setMessage("Are you sure you want to delete this event space?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -183,7 +182,6 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
             AlertDialog dialog = builder.create();
             dialog.show();
         } else {
-            // If the space was not added by the current user, show a message
             Toast.makeText(mContext, "Only the owner can delete this event space", Toast.LENGTH_SHORT).show();
         }
     }

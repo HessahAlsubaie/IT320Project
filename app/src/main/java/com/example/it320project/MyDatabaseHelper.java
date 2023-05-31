@@ -34,6 +34,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME_RENTED = "RentedSpaces";
     private static final String COLUMN_ID_RENTED = "_id";
     private static final String COLUMN_SPACE_ID_RENTED = "Space_id";
+    private static final String COLUMN_RENT_DATE_TIME = "rent_date_time";
 
 
 
@@ -77,6 +78,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         String queryRented = "CREATE TABLE " + TABLE_NAME_RENTED +
                 " (" + COLUMN_ID_RENTED + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_SPACE_ID_RENTED + " INTEGER, " +
+                COLUMN_RENT_DATE_TIME + " TEXT, " +
                 "user_id INTEGER, " +
                 "FOREIGN KEY(" + COLUMN_SPACE_ID_RENTED + ") REFERENCES " + TABLE_NAME + "(" + COLUMN_ID + "), " +
                 "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " + TABLENAME + "(" + COLUMN_USER_ID + ")" + " ) ";
@@ -163,11 +165,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertIntoRentedSpaces(int spaceId) {
+    public boolean insertIntoRentedSpaces(int spaceId,String rentDateTime) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_SPACE_ID_RENTED, spaceId);
+        values.put(COLUMN_USER_ID, getCurrentUserId());
+        values.put(COLUMN_RENT_DATE_TIME, rentDateTime);
 
         long insertedRows= db.insert(TABLE_NAME_RENTED, null, values);
        // db.close();

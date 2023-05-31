@@ -70,7 +70,7 @@
                 android:background="@drawable/custom_button"
                 android:text="View"
                 android:textSize="12sp"
-                app:backgroundTint="#484775"/>
+                app:backgroundTint="#64548E"/>
 
             <Button
                 android:id="@+id/deleteBtn"
@@ -81,7 +81,7 @@
                 android:background="@drawable/custom_button"
                 android:text="Delete"
                 android:textSize="12sp"
-                app:backgroundTint="#484775"/>
+                app:backgroundTint="#64548E"/>
 
         </LinearLayout>
 
